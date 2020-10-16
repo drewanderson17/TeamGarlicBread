@@ -18,27 +18,26 @@ If the user is not logged in, redirect to login page
 ----
 Mocking: 
 * If user is registering: 
-   * Create instance of new user in database via createNewUser(User) [POST] call
+   * Create instance of new user in database via backend.createNewUser(test_user) call
 * If user is logging in:
-   * Call backend.authenticateLogin
+   * Call backend.authenticateLogin(test_user)
     
- 
 Actions:
 * Open /login
 * If user has account:
     * Capture text entered in the email field and store it in #email element 
     * Capture text entered in the name field and store it in #name element 
     * Capture text entered in the password field and store it in #password element
-    * Forward captured information to the back-end via a [POST] call
-    * Click login button and see mocking for next steps 
+    * Click login button and forward captured information to the back-end via the frontend.logIn [POST] call 
+    * See mocking for next steps
 * If user does not have an account:
     * Redirect to /register 
     * Capture text entered in the email field and store it in #email element 
     * Capture text entered in the name field and store it in #name element 
-    * Capture text entered in the password field and store it in #password element after hashing
+    * Capture text entered in the password field and store it in #password
     * Ensure text entered in both password fields match (enter password, repeat password)
-    * Forward captured information to the back-end via a [POST] call
-    * Click register button and then refer to mocking for next steps 
+    * Forward captured information to the back-end via the frontend.register [POST] call
+    * Click the register button and then refer to mocking for next steps 
 
 ---
 ##### Test Case R3.02
@@ -61,11 +60,12 @@ This page shows user balance.
 ---
 Mocking:
 * Get user instance from backend via backend.get_user call
-* Get account balance via backend.user.getBalance call
+* Get account balance via backend.user.get_balance call
 
 Actions:
+* Fetch and store user_balance in #user_balance element via frontend.getUserBalance(test_user) [GET] request
 * Display data stored in #user_balance element in the webpage 
-* Compare displayed data to the data received via mocking calls
+* Compare displayed data to the data received via mocking calls and ensure they match 
 
 ---
 ##### Test case R3.0.4
@@ -92,10 +92,12 @@ Mocking:
 
 Actions: 
 * Open /available_tickets 
+* Call frontend.getAllTickets 
 * Store each tickets' name in #ticket element 
 * Store each tickets' quantity in #quantity element 
 * Store each tickets' owner's email in #owner_email element 
 * Store each tickets' price in #price element 
+* Store each tickets' date in #date element 
 * Display each ticket with all it's respective elements in list format
 * Ensure all tickets are being displayed via eye sight and browser developer tools
 
@@ -118,7 +120,7 @@ Actions:
 * Click submit form button 
 * Call frontend.postForm, which is a [POST] call to the backend 
 * Open /allTickets and ensure ticket just submitted is being correctly displayed 
-* Displayed ticket should show, name, available quantity, price and it's expiration date 
+* Displayed ticket should show name, quantity, price, the seller's email and it's expiration date 
 
 ---
 ##### Test case R3.0.7
@@ -133,7 +135,7 @@ Actions:
 * Load entered name into #name field
 * Load entered quantity into #quantity field 
 * Ensure correct results appear when the user clicks 'enter' on their query
-* Call frontend.buy_ticket [GET], which will call mocking step 2
+* Call frontend.buy_ticket(#name, #quantity) [GET], which will call mocking step 2
 * Open /user_profile
 * Check purchased tickets in /user_profile and ensure correct tickets have been purchased 
 
@@ -146,12 +148,12 @@ Mocking:
 * Post ticket-selling form's information to the database via backend.formToDB call 
 
 Actions:
-* Fill out all fields in ticket-selling form, which includes name, quantity, price and seller's email
-* Store each field in it's respective #field element (i.e name, quantity, price, email)
-* Call frontend.postFormToSell with respective #field elements (i.e name, quantity, price, email)  [POST]
+* Fill out all fields in ticket-selling form, which includes name, quantity, price, date and seller's email
+* Store each field in it's respective #field element (i.e name, quantity, price, email, date)
+* Call frontend.postFormToSell with respective #field elements (i.e name, quantity, price, email, date)  [POST]
 * Refer to mocking step 2
 * Open /sell
-* Ensure ticket being sold is available and all fields (i.e name, quantity price, email) are correct 
+* Ensure ticket being sold is available and all fields (i.e name, quantity price, email, date) are correct 
 
 ---
 ##### Test case R3.0.9
@@ -191,41 +193,53 @@ Actions:
 The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
 
 Mocking:
-* Call backend.getTicket to get ticket 
+* Get user instance via backend.get_user call
+* Call backend.add_ticket, which adds ticket to database
+* Call backend.update_ticket, which updates ticket
 
 Actions:
-* Call frontend.getTicket, which calls mocking step 1
-* Obtain ticket name by calling getTicketName method on ticket received in above step 
+* Open /createTicket 
+* Obtain ticket name by filling in name field, store name in #name element
 * Parse ticket name and ensure all characters are alphanumeric
 * Check if space exists and ensure it is not the first index or last index of the string
-* If either of the two bullet points above fail
+* If either of the two bullet points above fail upon the user hitting submit: 
     * Output message via alert box which contains the message: 
       "Invalid name for ticket, must be alphanumeric and spaces are not allowed for the first and last character"
     * Request user to update said ticket 
+* Else:
+    call frontend.addTicket [POST]
+* Repeat above steps for Open /updateTicket (from second bullet point)
 ---
 ##### Test case R4.0.2
 The name of the ticket is no longer than 60 characters
 
 Mocking:
-* Call backend.getTicket  
+* Get user instance via backend.get_user call
+* Call backend.add_ticket, which adds ticket to database
+* Call backend.update_ticket, which updates ticket
 
 Actions:
-* Store ticket name in a name variable
-* Check the length of the ticket name string
+* Open /createTicket 
+* Obtain ticket name by filling in name field, store name in #name element
+* Parse ticket name and ensure all characters are alphanumeric upon user clicking submit button
 * If len(ticket) < 60:
     * Allow for ticket to exist
-    * Call frontend.createTicket, or frontend.updateTicket - if ticket already exists
+    * Call frontend.createTicket [POST]
 * Else:
     * Report message to user via alert box:
       "Ticket name must be 60 or less characters"
     * Prompt user to re-enter ticket name via text field 
-    
+    * Call frontend.addTicket [POST]
+* Repeat above steps for Open /updateTicket (from second bullet point)
+
 ---
 ### Test case R4.0.3
 The quantity of the tickets has to be more than 0, and less than or equal to 100.
 
 Mocking:
-* Call backend.add_ticket, which adds ticket to database 
+* Get user instance via backend.get_user call
+* Call backend.add_ticket, which adds said ticket to database 
+* Call backend.update_ticket, which updates ticket
 
 Actions:
 * Open /createTicket
@@ -237,15 +251,19 @@ Actions:
 * Else:
     * Call frontend.add_ticket [POST]
     * Refer to Mocking 
+* Repeat above steps for Open /updateTicket (from second bullet point)
     
 ---
 ##### Test case R4.0.4
 Price has to be of range [10, 100]
 
 Mocking:
+* Get user instance via backend.get_user call
 * Call backend.add_ticket, which adds ticket to database
+* Call backend.update_ticket, which updates ticket
 
 Actions:
+* Open /createTicket
 * Capture data entered into price field and place it in #price element 
 * Check price element is bounded by both 10 and 100
 * 100 >= price >= 10
@@ -253,7 +271,8 @@ Actions:
     * Notify user with alert message:
     "Ticket price must be between, 100 and 10 (inclusive)"
 * Else:
-    * Call frontend.add_ticket 
+    * Call frontend.add_ticket [Post]
     * Refer to mocking
+* Repeat above steps for Open /updateTicket (from second bullet point)
 
  
