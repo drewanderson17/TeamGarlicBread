@@ -184,7 +184,7 @@ test_invalid_password = User(
 
 ### Action
 * display error message "error"
-* redirect back to home page 
+* redirect back to home pages 
 
 
 
