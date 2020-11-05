@@ -10,6 +10,54 @@ The html templates are stored in the 'templates' folder.
 """
 
 
+def validEmailFormat(email):
+    email, printableChars = email.lower(), ['!', '#', '$', '%', '&', "'", '*', '+', '-', '/',
+                                            '=', '?', '^', '_', '`', '{', '|', '}', '~', '.']
+    try:
+        atIdx = email.index('@')
+    except:
+        atIdx = None
+    if atIdx:
+        localPart = email[:atIdx]
+        domainPart = email[atIdx + 1:]
+    else:
+        return False
+
+    if localPart == "" or domainPart == "":
+        return False
+
+    for e, char in enumerate(localPart):
+        if e > 0 and char == '.' and localPart[e - 1] == '.':  # checks for consecutive '.'
+            return False
+        if e == len(localPart) - 1 and char == '.':  # if last character is a '.'
+            return False
+        if e == 0 and char == '.':  # if first character is a '.'
+            return False
+        if char not in printableChars and not (97 <= ord(char) <= 122) and not (48 <= ord(char) <= 57):  # invalid character
+            return False
+
+    for e, char in enumerate(domainPart):
+        if char == '-' and (e == 0 or e == len(domainPart) - 1):  # can't have '-' as first or last character
+            return False
+        if not ((97 <= ord(char) <= 122) or (48 <= ord(char) <= 57)):  # ensures only alphanumeric values
+            return False
+    return True
+
+
+def validPassword(password):
+    if len(password) < 6:
+        return False
+    specialChar, upperChar, lowerChar = False, False, False
+    for char in password:
+        if 97 <= ord(char) <= 122:
+            lowerChar = True
+        if 65 <= ord(char) <= 90:
+            upperChar = True
+        if not (97 <= ord(char) <= 122) and not (65 <= ord(char) <= 90):
+            specialChar = True
+    return specialChar and upperChar and lowerChar
+
+
 @app.route('/register', methods=['GET'])
 def register_get():
     # templates are stored in the templates folder
@@ -24,15 +72,19 @@ def register_post():
     password2 = request.form.get('password2')
     error_message = None
 
-
     if password != password2:
         error_message = "The passwords do not match"
-
+    elif email == "" or password == "":
+        error_message = "Email/Password cannot be empty"
     elif len(email) < 1:
         error_message = "Email format error"
-
     elif len(password) < 1:
         error_message = "Password not strong enough"
+    elif not validEmailFormat(email):
+        error_message = "Invalid email/password format"
+    elif not validPassword(password):
+        error_message = "Invalid email/password format"
+
     else:
         user = bn.get_user(email)
         if user:
@@ -71,9 +123,11 @@ def login_post():
         """
         # success! go back to the home page
         # code 303 is to force a 'GET' request
-        return redirect('/', code=303)
-    else:
-        return render_template('login.html', message='login failed')
+        return redirect('/', code=303)  # change redirect
+    message = 'email/password combination incorrect'
+    if email == "" or password == "":
+        message = 'Email/Password cannot be empty'
+    return render_template('login.html', message=message)
 
 
 @app.route('/logout')
@@ -117,7 +171,7 @@ def authenticate(inner_function):
     return wrapped_inner
 
 
-@app.route('/')
+@app.route('/', endpoint='auth_func1')
 @authenticate
 def profile(user):
     # authentication is done in the wrapper function
@@ -127,3 +181,9 @@ def profile(user):
     # front-end portals
     tickets = bn.get_all_tickets()
     return render_template('index.html', user=user, tickets=tickets)
+
+
+@app.route('/profile', endpoint='auth_func2')
+@authenticate
+def userProfile(user):
+    return render_template('profile.html', user=user)

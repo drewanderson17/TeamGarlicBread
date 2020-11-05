@@ -46,7 +46,8 @@ def register_user(email, name, password, password2):
 
     db.session.add(new_user)
     db.session.commit()
-    return None
+    successfulRegister = db.session.query(User.email).filter_by(email=email).scalar() is not None
+    return successfulRegister  # shouldn't always do this
 
 
 def get_all_tickets():
