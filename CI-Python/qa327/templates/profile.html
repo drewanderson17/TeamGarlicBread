@@ -1,1 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %}PROFILE{% endblock %}</h1>
 <h1>HELLO WELCOME TO THE PROFILE PAGE!</h1>
+<h1 id='message'>{{message}}</h1>
+<form method="post">
+    <div class="form-group">
+      <label for="name">name</label>
+      <input class="form-control" name="name" id="name" required>
+      <label for="quantity">quantity</label>
+      <input class="form-control" type="quantity" name="quantity" id="quantity" required>
+      <label for="price">price</label>
+      <input class="form-control" name="price" id="price" required>
+      <label for="expiration_date">expiration_date</label>
+      <input class="form-control" name="expiration_date" id="expiration_date" required>
+      <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Log In">
+    </div>
+  </form>
+  <a href='/sell'>Sell</a>
+  {% endblock %}    

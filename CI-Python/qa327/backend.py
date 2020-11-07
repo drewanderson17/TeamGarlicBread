@@ -52,3 +52,13 @@ def register_user(email, name, password, password2):
 
 def get_all_tickets():
     return []
+
+
+def profile_user(balance, ticket_name, quantity, price, expiration_date):
+    """
+    Profile page needs to show user balance
+    """
+    user_balance = User(balance = balance)
+    new_ticket = Ticket(ticket_name = ticket_name, quantity = quantity, price = price, expiration_date = expiration_date)
+    db.session.add(new_ticket)
+    db.session.commit()
