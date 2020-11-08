@@ -177,15 +177,15 @@ def profile_get():
     if 'logged_in' == False:     
         return redirect('/login')
     # R3.2 This page shows a header 'Hi {}'.format(user.name)
-    return render_template('profile.html', message='Hi'+ bn.user.name))
+    hi_message = render_template('profile.html', message='Hi'+ bn.user.name))
     # R3.3 This page shows user balance.
     user_balance = bn.profile_user(balance)
-    return render_template('profile.html', message=user_balance)
+    balance_message = render_template('profile.html', message=user_balance)
     # R3.4 This page lists all available tickets. Information including 
     # the quantity of each ticket, the owner's email, and the price, 
     # for tickets that are not expired.
     available_tickets = bn.get_all_tickets()
-    return render_template('profile.html', message=available_tickets)
+    ticket_message = render_template('profile.html', message=available_tickets)
     # R3.5 This page contains a form that a user can submit new tickets
     # for sell. Fields: name, quantity, price, expiration date
     sell_ticket = bn.profile_user(ticket_name, quantity, price, expiration_date)
@@ -204,7 +204,7 @@ def profile_get():
     # R3.10 The ticket-update form can be posted to /update
     if update_ticket != None:
         return redirect('/sell')
-
+    return(hi_message, balance_message, ticket_message) 
 
 @app.route('/', endpoint='auth_func1')
 @authenticate
