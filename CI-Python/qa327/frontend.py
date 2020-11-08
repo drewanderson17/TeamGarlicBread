@@ -58,17 +58,15 @@ def validPassword(password):
     return specialChar and upperChar and lowerChar
 
 def validName(name):
-    if len(char) < 2 or len(char)>20 
+    if len(char) < 2 or len(char)>20:
         return False 
-    specialChar, upperChar, lowerChar = False, False, False
+    upperChar, lowerChar = False, False, False
     
     for char in name:
         if 97<=ord(char)<= 122:
             lowerChar = True
         if 65<=ord(char)<= 90:
             upperChar = True
-        if not (97<=ord(char)<= 122) and not (65<=ord(char)<= 90):
-            specialChar = True
     return lowerChar and upperChar and specialChar
 
 
@@ -85,7 +83,6 @@ def register_post():
     password = request.form.get('password')
     password2 = request.form.get('password2')
     error_message = None
-    balance = 0
 
     #R2:password and password 2 meet requirements as defined by R1
     if password != password2: #password && password2 must match thus they must both meet the same requirements
@@ -118,7 +115,7 @@ def register_post():
         return render_template('register.html', message=error_message)
     else:
         #R2: if no error increase balance by 5000 and redirecto to login
-        balance = balance + 5000
+        balance = bn.get_user(balance) + 5000
         return redirect('/login')
 
 
@@ -159,7 +156,7 @@ def logout():
         session.pop('logged_in', None)
 
         #if the user has logged in redirect to profile page
-    return redirect('/profile')
+    return redirect('/')
     #otherwise show the user registration page
     else return redirect('/register')
 
