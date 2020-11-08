@@ -60,14 +60,14 @@ def validPassword(password):
 def validName(name):
     if len(char) < 2 or len(char)>20:
         return False 
-    upperChar, lowerChar = False, False, False
+    upperChar, lowerChar = False, False
     
     for char in name:
         if 97<=ord(char)<= 122:
             lowerChar = True
         if 65<=ord(char)<= 90:
             upperChar = True
-    return lowerChar and upperChar and specialChar
+    return lowerChar and upperChar 
 
 
 @app.route('/register', methods=['GET'])
