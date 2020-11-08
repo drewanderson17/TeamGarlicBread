@@ -57,6 +57,18 @@ def validPassword(password):
             specialChar = True
     return specialChar and upperChar and lowerChar
 
+def validName(name):
+    if len(char) < 2 or len(char)>20:
+        return False 
+    upperChar, lowerChar = False, False
+    
+    for char in name:
+        if 97<=ord(char)<= 122:
+            lowerChar = True
+        if 65<=ord(char)<= 90:
+            upperChar = True
+    return lowerChar and upperChar 
+
 
 @app.route('/register', methods=['GET'])
 def register_get():
@@ -72,7 +84,8 @@ def register_post():
     password2 = request.form.get('password2')
     error_message = None
 
-    if password != password2:
+    #R2:password and password 2 meet requirements as defined by R1
+    if password != password2: #password && password2 must match thus they must both meet the same requirements
         error_message = "The passwords do not match"
     elif email == "" or password == "":
         error_message = "Email/Password cannot be empty"
@@ -84,18 +97,25 @@ def register_post():
         error_message = "Invalid email/password format"
     elif not validPassword(password):
         error_message = "Invalid email/password format"
-
     else:
-        user = bn.get_user(email)
+        user = bn.get_user(email) #R2 if email exists displayy error message
         if user:
             error_message = "User exists"
         elif not bn.register_user(email, name, password, password2):
             error_message = "Failed to store user info."
+
+    #R2: if user name has formatting error
+    if not validName(name):
+        error_message = "incorrect format of user name"
+
     # if there is any error messages when registering new user
-    # at the backend, go back to the register page.
+    # at the backend, go back to the register page 
+    # satisfies R2 requirement for redicrect with user name errors
     if error_message:
         return render_template('register.html', message=error_message)
     else:
+        #R2: if no error increase balance by 5000 and redirecto to login
+        balance = bn.get_user(balance) + 5000
         return redirect('/login')
 
 
@@ -134,7 +154,11 @@ def login_post():
 def logout():
     if 'logged_in' in session:
         session.pop('logged_in', None)
+
+        #if the user has logged in redirect to profile page
     return redirect('/')
+    #otherwise show the user registration page
+    else return redirect('/register')
 
 
 def authenticate(inner_function):
