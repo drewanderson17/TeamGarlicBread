@@ -20,9 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49a0bc74-ee2f-4b95-b051-6b2e1b025764" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Detailed Test Plan.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qa327/TestPlan.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CI-Python/qa327/frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/CI-Python/qa327/frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CI-Python/qa327/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/CI-Python/qa327/templates/error.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,5 +89,9 @@
       <screen x="0" y="0" width="1504" height="963" />
     </state>
     <state x="570" y="395" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1504.963/2256.0.1920.1040@0.0.1504.963" timestamp="1604874357765" />
+    <state x="2879" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1604887049695">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2879" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1604887049695" />
   </component>
 </project>
