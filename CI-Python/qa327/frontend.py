@@ -149,7 +149,6 @@ def login_post():
         message = 'Email/Password cannot be empty'
     return render_template('login.html', message=message)
 
-
 @app.route('/logout')
 def logout():
     if 'logged_in' in session:
@@ -211,3 +210,8 @@ def profile(user):
 @authenticate
 def userProfile(user):
     return render_template('profile.html', user=user)
+
+
+@app.errorhandler(404)
+def error404(error):
+	return "error.html"
