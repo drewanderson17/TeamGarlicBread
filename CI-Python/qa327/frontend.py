@@ -154,11 +154,11 @@ def login_post():
 def logout():
     if 'logged_in' in session:
         session.pop('logged_in', None)
-
-        #if the user has logged in redirect to profile page
-    return redirect('/')
-    #otherwise show the user registration page
-    else return redirect('/register')
+        # if the user has logged in redirect to profile page
+        return redirect('/')
+    # otherwise show the user registration page
+    else:
+        return redirect('/register')
 
 
 def authenticate(inner_function):
