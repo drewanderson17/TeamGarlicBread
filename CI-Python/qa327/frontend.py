@@ -33,7 +33,8 @@ def validEmailFormat(email):
             return False
         if e == 0 and char == '.':  # if first character is a '.'
             return False
-        if char not in printableChars and not (97 <= ord(char) <= 122) and not (48 <= ord(char) <= 57):  # invalid character
+        if char not in printableChars and not (97 <= ord(char) <= 122) and not (
+                48 <= ord(char) <= 57):  # invalid character
             return False
 
     for e, char in enumerate(domainPart):
@@ -57,17 +58,18 @@ def validPassword(password):
             specialChar = True
     return specialChar and upperChar and lowerChar
 
+
 def validName(name):
-    if len(char) < 2 or len(char)>20:
-        return False 
+    if len(char) < 2 or len(char) > 20:
+        return False
     upperChar, lowerChar = False, False
-    
+
     for char in name:
-        if 97<=ord(char)<= 122:
+        if 97 <= ord(char) <= 122:
             lowerChar = True
-        if 65<=ord(char)<= 90:
+        if 65 <= ord(char) <= 90:
             upperChar = True
-    return lowerChar and upperChar 
+    return lowerChar and upperChar
 
 
 @app.route('/register', methods=['GET'])
@@ -84,8 +86,8 @@ def register_post():
     password2 = request.form.get('password2')
     error_message = None
 
-    #R2:password and password 2 meet requirements as defined by R1
-    if password != password2: #password && password2 must match thus they must both meet the same requirements
+    # R2:password and password 2 meet requirements as defined by R1
+    if password != password2:  # password && password2 must match thus they must both meet the same requirements
         error_message = "The passwords do not match"
     elif email == "" or password == "":
         error_message = "Email/Password cannot be empty"
@@ -98,13 +100,13 @@ def register_post():
     elif not validPassword(password):
         error_message = "Invalid email/password format"
     else:
-        user = bn.get_user(email) #R2 if email exists displayy error message
+        user = bn.get_user(email)  # R2 if email exists displayy error message
         if user:
             error_message = "User exists"
         elif not bn.register_user(email, name, password, password2):
             error_message = "Failed to store user info."
 
-    #R2: if user name has formatting error
+    # R2: if user name has formatting error
     if not validName(name):
         error_message = "incorrect format of user name"
 
@@ -114,7 +116,7 @@ def register_post():
     if error_message:
         return render_template('register.html', message=error_message)
     else:
-        #R2: if no error increase balance by 5000 and redirecto to login
+        # R2: if no error increase balance by 5000 and redirecto to login
         balance = bn.get_user(balance) + 5000
         return redirect('/login')
 
@@ -211,3 +213,8 @@ def profile(user):
 @authenticate
 def userProfile(user):
     return render_template('profile.html', user=user)
+
+
+@app.errorhandler(404)
+def error404(error):
+    return render_template('error.html')
