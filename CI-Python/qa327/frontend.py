@@ -60,7 +60,7 @@ def validPassword(password):
 
 
 def validName(name):
-    if len(char) < 2 or len(char) > 20:
+    if len(name) < 2 or len(name) > 20:
         return False
     upperChar, lowerChar = False, False
 
@@ -117,7 +117,7 @@ def register_post():
         return render_template('register.html', message=error_message)
     else:
         # R2: if no error increase balance by 5000 and redirecto to login
-        balance = bn.get_user(balance) + 5000
+        #balance = bn.get_user(balance) + 5000     This makes no sense :)
         return redirect('/login')
 
 
