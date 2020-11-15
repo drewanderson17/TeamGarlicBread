@@ -54,15 +54,15 @@ def get_all_tickets():
     return []
 
 
-def profile_user(balance, ticket_name, quantity, price, expiration_date):
-    """
-    Profile page needs to show user balance
-    """
-    user_balance = User(balance = balance)
-    new_ticket = Tickets(ticket_name = ticket_name, quantity = quantity, price = price, expiration_date = expiration_date)
-    db.session.add(new_ticket)
-    db.session.add(user_balance)
-    db.session.commit() 
+# def profile_user(balance, ticket_name, quantity, price, expiration_date):
+#     """
+#     Profile page needs to show user balance
+#     """
+#     user_balance = User(balance = balance)
+#     new_ticket = Tickets(ticket_name = ticket_name, quantity = quantity, price = price, expiration_date = expiration_date)
+#     db.session.add(new_ticket)
+#     db.session.add(user_balance)
+#     db.session.commit() 
 
-def get_user_balance(User):
-    return get_user_balance
+# def get_user_balance(User):
+#     return get_user_balance
