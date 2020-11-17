@@ -37,10 +37,14 @@ def validEmailFormat(email):
                 48 <= ord(char) <= 57):  # invalid character
             return False
 
+    domainPeriodCount = 0
     for e, char in enumerate(domainPart):
+        if char == '.' and domainPeriodCount == 0:
+            domainPeriodCount = 1
+            continue
         if char == '-' and (e == 0 or e == len(domainPart) - 1):  # can't have '-' as first or last character
             return False
-        if not ((97 <= ord(char) <= 122) or (48 <= ord(char) <= 57)):  # ensures only alphanumeric values
+        if not ((97 <= ord(char) <= 122) or (48 <= ord(char) <= 57) or char == '-'):  # ensures alphanumeric values or -
             return False
     return True
 
@@ -146,7 +150,10 @@ def login_post():
         # success! go back to the home page
         # code 303 is to force a 'GET' request
         return redirect('/', code=303)  # change redirect
-    message = 'email/password combination incorrect'
+    if validEmailFormat(email) and validPassword(password):
+        message = 'email/password combination incorrect'
+    else:
+        message = "Email/password format is incorrect"
     if email == "" or password == "":
         message = 'Email/Password cannot be empty'
     return render_template('login.html', message=message)
