@@ -1,4 +1,4 @@
-# Pull Request Template
+## Pull Request Template
 
 Please include a summary of the changes you've made:
 
