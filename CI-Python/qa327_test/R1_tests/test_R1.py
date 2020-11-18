@@ -44,6 +44,7 @@ class R1(BaseCase):
         self.register()
         self.login()
         self.assertTrue(self.get_current_url() == base_url + '/')
+        self.logout()
 
     # The login page provides a login form which requests two fields: email and passwords
     def test_correct_fields_login(self):
@@ -74,8 +75,8 @@ class R1(BaseCase):
     # Email has to follow addr-spec defined in RFC 5322
     def test_valid_email(self):
         emailsToTestValid = ["email@me.com", "email@email", "e56@gmail.com", "e_#$37@test.ca",
-                             "e@online", "222g22@k.com"]
-        emailsToTestInvalid = ["email", "e.com", "email878979879    @me.ca", " e @google.com", ]
+                             "e@online", "222g22@k.com", "me@g--g.ca"]
+        emailsToTestInvalid = ["email", "e.com", "email878979879    @me.ca", " e @google.com", "e@google-", "e@-g"]
         for email in emailsToTestValid:
             self.open(base_url + '/register')
             self.type("#email", email)
@@ -89,6 +90,7 @@ class R1(BaseCase):
             self.type("#password", "Testing!0")
             self.click('input[type="submit"]')
             self.assertTrue(self.get_current_url() == base_url + '/')  # profile page
+            self.logout()
 
         for email in emailsToTestInvalid:
             self.open(base_url + '/register')
@@ -117,6 +119,7 @@ class R1(BaseCase):
             self.type("#password", password)
             self.click('input[type="submit"]')
             self.assertTrue(self.get_current_url() == base_url + '/')  # profile page
+            self.logout()
 
         for password in invalidPasswords:
             self.open(base_url + '/register')
@@ -150,7 +153,6 @@ class R1(BaseCase):
         self.type("#email", "goodemail@gmail.com")
         self.type("#password", "UserDNE12@")
         self.click('input[type="submit"]')
-        print('\n\n' + self.get_text("#message") + '\n\n')
         self.assert_text("email/password combination incorrect", "#message")
         self.assertTrue(self.get_current_url() == base_url + '/login')
 
@@ -159,3 +161,4 @@ class R1(BaseCase):
         self.register()
         self.login()
         self.assertTrue(self.get_current_url() == base_url + '/')
+        self.logout()
