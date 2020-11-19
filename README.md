@@ -6,4 +6,4 @@ danielGoldsteinCS2021
 
 ---
 
-[![](https://github.com/repo_owner_id/repo_name/workflows/Python%20application/badge.svg)]()
+[![](https://github.com/repo_owner_id/repo_name/workflows/pythonapp/badge.svg)]()
