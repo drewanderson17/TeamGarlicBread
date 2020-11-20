@@ -26,10 +26,10 @@ class User(db.Model):
 
 class Tickets(db.Model):
     ticket_id = db.Column(db.Integer, primary_key=True)
-    ticket_name = db.Column(db.String(1000))
+    ticket_name = db.Column(db.String(1000), unique=True)
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
-    expiration_date = db.Column(db.Date)
+    expiration_date = db.Column(db.String(100))
 
 
 # it creates all the SQL tables if they do not exist
