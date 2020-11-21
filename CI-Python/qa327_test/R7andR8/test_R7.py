@@ -8,7 +8,6 @@ from qa327.models import db, User
 
 
 
-
 """
 test cases required for R7
 Logout will invalid the current session and redirect to the login page.
@@ -74,5 +73,3 @@ class R7(BaseCase):
         self.open(base_url + '/invalidadress')
         self.assertTrue(self.get_current_url() == base_url + '/invalidadress')
 
-        # if the user stays at the same route then we know that they have encountered error handling
-        # since the page doesn't exist
