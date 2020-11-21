@@ -110,10 +110,10 @@ class R2(BaseCase):
             self.assertTrue(self.get_current_url() == base_url + '/')
     
         # User name has to be longer than 2 characters and less than 20 characters.
-        def test_name_length(self):
-            validname = ["ramtin", "daniel","drew"]
-            invalidname = ["an", "bl", "qwertyuiopasdfghjklzxcv"]
-              for name in validName:
+    def test_name_length(self):
+        validname = ["ramtin", "daniel","drew"]
+        invalidname = ["an", "bl", "qwertyuiopasdfghjklzxcv"]
+            for name in validName:
                 self.open(base_url + '/register')
                 self.type("#email", "nick@email.com")
                 self.type("#name", name)
