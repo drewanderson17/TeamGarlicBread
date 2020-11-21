@@ -158,41 +158,19 @@ def login_post():
         message = 'Email/Password cannot be empty'
     return render_template('login.html', message=message)
 
-# @app.route('/', methods=['GET'])
-# def profile_get(user):
-#     # templates are stored in the templates folder
-#     # R3.1 If the user is not logged in, redirect to login page
-#     if 'logged_in' == False:     
-#         return redirect('/login')
-#     # R3.2 This page shows a header 'Hi {}'.format(user.name)
-#     hi_message = bn.get_user()
-#     # R3.3 This page shows user balance.
-#     user_balance = bn.get_user_balance(user)
-#     balance_message = user_balance
-#     # R3.4 This page lists all available tickets. Information including 
-#     # the quantity of each ticket, the owner's email, and the price, 
-#     # for tickets that are not expired.
-#     available_tickets = bn.get_all_tickets()
-#     ticket_message = available_tickets
-#     # R3.5 This page contains a form that a user can submit new tickets
-#     # for sell. Fields: name, quantity, price, expiration date
-#     sell_ticket = bn.profile_user(ticket_name, quantity, price, expiration_date)
-#     # R3.6 This page contains a form that a user can buy new tickets.
-#     # Fields: name, quantity
-#     buy_ticket = bn.profile_user(ticket_name, quantity)
-#     # R3.7 This page contains a form that a user can update existing tickets. 
-#     # Fields: name, quantity, price, expiration date
-#     update_ticket = bn.profile_user(ticket_name, quantity, price, expiration_date)
-#     # R3.8 The ticket-selling form can be posted to /sell
-#     if sell_ticket != None:
-#         return redirect('/sell')
-#     # R3.9 The ticket-buying form can be posted to /buy
-#     if buy_ticket != None:
-#         return redirect('/buy')
-#     # R3.10 The ticket-update form can be posted to /update
-#     if update_ticket != None:
-#         return redirect('/sell')
-#     return render_template('index.html', message = balance_message, ticket_message, update_ticket)
+@app.route('/', methods=['GET'])
+def profile_get():
+    return render_template('index.html', message='Hi test!')
+
+@app.route('/', methods=['POST'])
+def profile_post():
+    ticket_name = request.form.get('ticket_name')
+    quantity = request.form.get('quantity')
+    price = request.form.get('price')
+    expiration_date = request.form.get('expiration_date')
+    return render_template('index.html', message='sucessful')
+
+    
 @app.route('/logout')
 def logout():
     if 'logged_in' in session:
