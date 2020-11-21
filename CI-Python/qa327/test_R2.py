@@ -160,7 +160,7 @@ class R2(BaseCase):
          self.open(base_url+ '/register')
          for email in usedemail:
             self.type("#email", "nick@email.com")
-            #
+            # removed for errors
            # if (self.elf.assert_True("email" === email):
             #    self.assert_text("this email has been ALREADY used", "#message")
             
