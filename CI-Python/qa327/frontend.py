@@ -212,6 +212,7 @@ def authenticate(inner_function):
     # return the wrapped version of the inner_function:
     return wrapped_inner
 
+
 '''
 @app.route('/', methods=['GET'])
 @authenticate
@@ -239,6 +240,7 @@ def error404(error):
 
 
 # R4 Below
+
 
 @app.route('/sell', methods=['GET'], endpoint="get_end")
 @authenticate
@@ -311,3 +313,61 @@ def sellValidTicket(user):
     return render_template('sell.html', user=user, message=user.name, error_message="Ticket added successfully!") if \
         ticketAdded \
         else render_template('sell.html', user=user, message=user.name, error_message="Ticket could not be added!")
+
+
+#  R6 buy tickets
+
+@app.route('/buy', methods=['GET'], endpoint="buy_end")
+@authenticate
+def buy(user):
+    return render_template('buy.html', user=user, message=user.name, error_message="")
+
+
+def validTicket(ticket_name):
+    return bn.ticket_exist(ticket_name)
+
+
+# bn.get_ticket_quantity will return -1 if ticket isn't found
+def valid_Quantity(numTickets, ticket_name):
+    availTickets = bn.get_ticket_quantity(ticket_name)
+    return (0 <= numTickets <= 100) and (numTickets > availTickets)
+
+
+def validBalance(balance, quantity, price):
+    total = quantity * price
+    return balance > total + (total * 0.35) + (total * 0.05)
+
+
+@app.route('/buy', methods=['POST'], endpoint='posted_end')
+@authenticate
+def sellValidTicket(user):
+    ticket_name = request.form.get('ticket_name')
+    quantity = request.form.get('quantity')
+    price = request.form.get('price')
+    balance = request.form.get('balance')
+
+    bad_Quantity = render_template('sell.html', user=user, message=user.name,
+                                   error_message="Ticket quantity is invalid (quantity must be between [0,100]")
+    badBuy = render_template('sell.html', user=user, message=user.name, error_message="invalid quantity (tried to buy "
+                                                                                      "too many tickets)")
+    badBalance = render_template('sell.html', user=user, message=user.name,
+                                 error_message=" account  balance is invalid")
+    badName = render_template('sell.html', user=user, message=user.name, error_message="Ticket name is invalid")
+
+    if not int(quantity):
+        return bad_Quantity
+
+    if not validTicket(ticket_name):
+        return badName
+
+    if not valid_Quantity(quantity, ticket_name):
+        return bad_Quantity
+
+    if not validQuantity(quantity):
+        return bad_Quantity
+
+    if not validBalance(balance, quantity, price):
+        return badBalance
+
+    else:
+        return render_template('sell.html', user=user, message=user.name, error_message="Tickets bought successfully!")
