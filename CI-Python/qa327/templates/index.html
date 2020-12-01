@@ -1,38 +1,35 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Profile{% endblock %}</h1>
+    <h1>{% block title %}Profile{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<h2 id='message'>{{message}}</h2>
-<h3 id='message'>Profile</h3>
-<h4 id='message'>sell ticket or update</h4>
-<form method="post">
-  <div class="form-group">
-    <label for="ticket_name">Ticket Name</label>
-    <input class="form-control" name="ticket_name" id="ticket_name" required>
-    <label for="quantity">quantity</label>
-    <input class="form-control" name="quantity" id="quantity" required>
-    <label for="price">price</label>
-    <input class="form-control" name="price" id="price" required>
-    <label for="expiration_date">Expiration Date</label>
-    <input class="form-control" name="expiration_date" id="expiration_date" required>
-    <input class="btn btn-primary" type="submit" value="submit">
-  
-  </div>
-</form>
+    <h2 id='message'>{{ message }}</h2>
+    <h3 id='message'>Profile</h3>
+    <a href='/sell' class="btn btn-primary" id="sell-btn" value="Sell Tickets">Sell Tickets</a>
 
-<h4 id='message'>buy ticket</h4>
-<form method="post">
-  <div class="form-group">
-    <label for="ticket_name">Ticket Name</label>
-    <input class="form-control" name="ticket_name" id="" required>
-    <label for="quantity">quantity</label>
-    <input class="form-control" name="quantity" id="quantity" required>
-    <input class="btn btn-primary" type="submit" value="submit">
-  <a href='/login' class="btn btn-primary" id="btn-logout" type = "logout" value = "logout" >logout</a>
-  </div>
-</form>
-<h4 id='message'>balance:</h4>
+    <h4 id='message'>buy ticket</h4>
+    <form method="post">
+        <div class="form-group">
+            <label for="ticket_name">Ticket Name</label>
+            <input class="form-control" name="ticket_name" id="" required>
+            <label for="quantity">quantity</label>
+            <input class="form-control" name="quantity" id="quantity" required>
+            <input class="btn btn-primary" type="submit" value="submit">
+            <a href='/login' class="btn btn-primary" id="btn-logout" type="logout" value="logout">logout</a>
+        </div>
+    </form>
+    <h4 id='message'>balance:</h4>
+    <div class="ticketsBeingSold">
+        <h1>Tickets Being Sold</h1>
+        {% for ticket in tickets %}
+            <h3>{{ ticket.ticket_name }}</h3>
+            <ul>
+                <li>${{ ticket.price }} </li>
+                <li>{{ ticket.quantity }} available</li>
+                <li>Expires on {{ ticket.expiration_date }} - read as YYYYMMDD </li>
+            </ul>
+        {% endfor %}
+    </div>
 {% endblock %}
