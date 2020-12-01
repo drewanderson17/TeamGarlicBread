@@ -121,7 +121,7 @@ def register_post():
         return render_template('register.html', message=error_message)
     else:
         # R2: if no error increase balance by 5000 and redirecto to login
-        #balance = bn.get_user(balance) + 5000     This makes no sense :)
+        # balance = bn.get_user(balance) + 5000     This makes no sense :)
         return redirect('/login')
 
 
@@ -158,9 +158,12 @@ def login_post():
         message = 'Email/Password cannot be empty'
     return render_template('login.html', message=message)
 
+
 @app.route('/', methods=['GET'])
 def profile_get():
-    return render_template('index.html', message='Hi test!')
+    tickets = bn.get_all_tickets()
+    return render_template('index.html', message='Hi test!', tickets=tickets)
+
 
 @app.route('/', methods=['POST'])
 def profile_post():
@@ -170,7 +173,7 @@ def profile_post():
     expiration_date = request.form.get('expiration_date')
     return render_template('index.html', message='sucessful')
 
-    
+
 @app.route('/logout')
 def logout():
     if 'logged_in' in session:
@@ -228,12 +231,81 @@ def profile(user):
     return render_template('index.html', user=user, tickets=tickets)
 
 
-@app.route('/profile', endpoint='auth_func2')
-@authenticate
-def userProfile(user):
-    return render_template('profile.html', user=user)
-
-
 @app.errorhandler(404)
 def error404(error):
     return render_template('error.html')
+
+
+# R4 Below
+
+@app.route('/sell', methods=['GET'], endpoint="get_end")
+@authenticate
+def sell(user):
+    return render_template('sell.html', user=user, message=user.name, error_message="")
+
+
+def validTicketName(ticketName):
+    for e, c in enumerate(ticketName):
+        if c == " " and (e == 0 or e == len(ticketName) - 1):
+            return False
+        if not (48 <= ord(c) <= 57 or 65 <= ord(c) <= 90 or 97 <= ord(c) <= 122 or c == " "):
+            return False
+    return len(ticketName) <= 60
+
+
+def validQuantity(numOfTickets):
+    return 0 <= numOfTickets <= 100
+
+
+def validPrice(ticketPrice):
+    return 10 <= ticketPrice <= 100
+
+
+def validDate(date):
+    days = date % 100
+    date //= 100
+    month = date % 100
+    date //= 100
+    year = date
+    return year >= 2020 and 1 <= month <= 12 and 1 <= days <= 31
+
+
+# NOTE: if there is an error I don't redirect to '/' but stay on '/sell' so the user can try and add their ticket again
+@app.route('/sell', methods=['POST'], endpoint='post_end')
+@authenticate
+def sellValidTicket(user):
+    ticket_name = request.form.get('ticket_name')
+    quantity = request.form.get('quantity')
+    price = request.form.get('price')
+    expiration_date = request.form.get('expiration_date')
+
+    badName = render_template('sell.html', user=user, message=user.name, error_message="Ticket name is invalid")
+    badQuantity = render_template('sell.html', user=user, message=user.name, error_message="Ticket quantity is invalid")
+    badPrice = render_template('sell.html', user=user, message=user.name, error_message="Ticket price is invalid")
+    badDate = render_template('sell.html', user=user, message=user.name, error_message="Ticket date is invalid")
+
+    try:
+        quantity = int(quantity)
+    except Exception as e:
+        return badQuantity
+    try:
+        price = int(price)
+    except Exception as e:
+        return badPrice
+    try:
+        expiration_date = int(expiration_date)
+    except Exception as e:
+        return badDate
+
+    if not validTicketName(ticket_name):
+        return badName
+    if not validQuantity(quantity):
+        return badQuantity
+    if not validPrice(price):
+        return badPrice
+    if not validDate(expiration_date):
+        return badDate
+    ticketAdded = bn.add_tickets(ticket_name, quantity, price, expiration_date)
+    return render_template('sell.html', user=user, message=user.name, error_message="Ticket added successfully!") if \
+        ticketAdded \
+        else render_template('sell.html', user=user, message=user.name, error_message="Ticket could not be added!")

@@ -51,15 +51,26 @@ def register_user(email, name, password, password2):
 
 
 def get_all_tickets():
-    return []
+    return db.session.query(Tickets).all()
+
 
 def get_ticket(ticket_name):
-    ticket = Tickets.query.filter_by(ticket_name=ticket_name).first()
+    ticket = Tickets.query.filter_by(ticket_name=ticket_name).first()  # whoever did this - it won't work!
     return ticket
+
+
+def add_tickets(ticket_name, quantity, price, expiration_date):
+    new_ticket = Tickets(ticket_name=ticket_name, quantity=quantity, price=price, expiration_date=expiration_date)
+    if not db.session.query(Tickets.ticket_name).filter_by(ticket_name=ticket_name).scalar():  # ticket not in db
+        db.session.add(new_ticket)
+        db.session.commit()
+    successfulTicket = db.session.query(Tickets.ticket_name).filter_by(ticket_name=ticket_name).scalar() is not None
+    return successfulTicket
+
 
 def profile_user(balance, ticket_name, quantity, price, expiration_date):
     #user_balance = User(balance = balance)
-    new_ticket = Tickets(ticket_name = ticket_name, quantity = quantity, price = price, expiration_date = expiration_date)
+    new_ticket = Tickets(ticket_name=ticket_name, quantity=quantity, price=price, expiration_date=expiration_date)
     db.session.add(new_ticket)
     #db.session.add(user_balance)
     db.session.commit() 
