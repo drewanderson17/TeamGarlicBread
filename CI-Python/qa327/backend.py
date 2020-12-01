@@ -74,7 +74,19 @@ def get_ticket_quantity(ticket_name):
         return quantity
     else:
         return -1
-    pass
+
+
+def get_ticket_price(ticket_name):
+    if ticket_exist(ticket_name):
+        ticket = Tickets.query.filter_by(ticket_name=ticket_name).first()
+        price = ticket.price
+        return price
+    else:
+        return -1
+
+
+def get_user_balance(user):
+    return 50000
 
 
 def add_tickets(ticket_name, quantity, price, expiration_date):
