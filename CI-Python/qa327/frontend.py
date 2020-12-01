@@ -159,12 +159,6 @@ def login_post():
     return render_template('login.html', message=message)
 
 
-@app.route('/', methods=['GET'])
-def profile_get():
-    tickets = bn.get_all_tickets()
-    return render_template('index.html', message='Hi test!', tickets=tickets)
-
-
 @app.route('/', methods=['POST'])
 def profile_post():
     ticket_name = request.form.get('ticket_name')
@@ -218,6 +212,14 @@ def authenticate(inner_function):
     # return the wrapped version of the inner_function:
     return wrapped_inner
 
+'''
+@app.route('/', methods=['GET'])
+@authenticate
+def profile_get():
+    tickets = bn.get_all_tickets()
+    return render_template('index.html', message='Hi test!', tickets=tickets)
+'''
+
 
 @app.route('/', endpoint='auth_func1')
 @authenticate
@@ -228,7 +230,7 @@ def profile(user):
     # the login checking code all the time for other
     # front-end portals
     tickets = bn.get_all_tickets()
-    return render_template('index.html', user=user, tickets=tickets)
+    return render_template('index.html', message=user.name, user=user, tickets=tickets)
 
 
 @app.errorhandler(404)
