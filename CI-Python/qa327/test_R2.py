@@ -7,7 +7,7 @@ from qa327_test.conftest import base_url
 from unittest.mock import patch
 from qa327.models import db, User
 
-
+'''
 class R2(BaseCase):
 
     # User has logged in redirect them to the homepage, otherwise show registration page
@@ -172,3 +172,4 @@ class R2(BaseCase):
       #  self.login()
        # self.assertTrue(balance = balance +5000)
 
+'''
