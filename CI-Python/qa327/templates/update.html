@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 id='message'>Welcome! Lets update some tickets {{message}}!</h1>
+    <h2 id="error_message">{{error_message}}</h2>
+    <a href='/' class="btn btn-primary" id="home-btn" value = "Home">Home</a>
+    <form method="post">
+        <div class="form-group">
+            <label for="ticket_name">Ticket Name</label>
+            <input class="form-control" name="ticket_name" id="ticket_name" required>
+            <label for="quantity">Quantity</label>
+            <input class="form-control" name="quantity" id="quantity" required>
+            <label for="price">Price</label>
+            <input class="form-control" name="price" id="price" required>
+            <label for="expiration_date">Expiration Date</label>
+            <input class="form-control" name="expiration_date" id="expiration_date" required>
+            <input class="btn btn-primary" name="submit-button" type="submit" value="submit">
+        </div>
+    </form>
+{% endblock %}
