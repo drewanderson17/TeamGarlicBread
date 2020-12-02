@@ -381,3 +381,31 @@ def sellValidTicket(user):
 
     else:
         return render_template('buy.html', user=user, message=user.name, error_message="Tickets bought successfully!")
+
+# R5 Requirements
+@app.route('/update', methods=['GET'], endpoint="buy_end")
+@authenticate
+def update(user):
+    return render_template('update.html', user=user, message=user.name, error_message="")
+
+# R5.1, 5.2 Check valid ticket name
+def validTicket(ticket_name):
+    val = validTicketName(ticket_name)
+    return bn.ticket_exist(ticket_name) and val
+
+# R5.3 Check quantity of tickets
+def validQuantity(numOfTickets):
+    return 0 <= numOfTickets <= 100
+
+# R5.4 Ticket price
+def validPrice(ticketPrice):
+    return 10 <= ticketPrice <= 100
+
+# R5.5 Check date format
+def validDate(date):
+    days = date % 100
+    date //= 100
+    month = date % 100
+    date //= 100
+    year = date
+    return year >= 2020 and 1 <= month <= 12 and 1 <= days <= 31
