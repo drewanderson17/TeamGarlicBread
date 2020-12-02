@@ -27,7 +27,7 @@ class R3(BaseCase):
         self.click('input[type="submit"]')
 
     def profile(self):
-        self.open(base_url + '/')
+        self.open(base_url + '/sell')
         self.type("#ticket_name", "test")
         self.type("#quantity", 5)
         self.type("#price", 20)
@@ -59,13 +59,17 @@ class R3(BaseCase):
 
     # R3.4 This page shows a logout link, pointing to /logout
     def test_logout_link(self):
+        self.register()
+        self.login()
         self.open(base_url + '/')
         self.assert_element("#btn-logout")
 
 
     # R3.5 This page lists all available tickets. Information including the quantity of each ticket, the owner's email, and the price, for tickets that are not expired.
     def test_available_tickets(self):
-        self.open(base_url + '/')
+        self.register()
+        self.login()
+        self.open(base_url + '/sell')
         self.assert_element("#ticket_name")
         self.assert_element("#quantity")
         self.assert_element("#price")
@@ -74,7 +78,9 @@ class R3(BaseCase):
   
     # R3.6 This page contains a form that a user can submit new tickets for sell. Fields: name, quantity, price, expiration date
     def test_sell_tickets(self):
-        self.open(base_url + '/')
+        self.register()
+        self.login()
+        self.open(base_url + '/sell')
         self.assert_element("#ticket_name")
         self.assert_element("#quantity")
         self.assert_element("#price")
@@ -82,7 +88,9 @@ class R3(BaseCase):
 
     # R3.7 	This page contains a form that a user can buy new tickets. Fields: name, quantity
     def test_buy_tickets(self):
-        self.open(base_url + '/')
+        self.register()
+        self.login()
+        self.open(base_url + '/sell')
         self.assert_element("#ticket_name")
         self.assert_element("#quantity")
 
@@ -90,7 +98,9 @@ class R3(BaseCase):
 
     # R3.8 This page contains a form that a user can update existing tickets. Fields: name, quantity, price, expiration date
     def test_update_tickets(self):
-        self.open(base_url + '/')
+        self.register()
+        self.login()
+        self.open(base_url + '/sell')
         self.assert_element("#ticket_name")
         self.assert_element("#quantity")
         self.assert_element("#price")
@@ -98,12 +108,16 @@ class R3(BaseCase):
 
     # R3.9 The ticket-selling form can be posted to /sell
     def test_posted_to_sell(self):
+        self.register()
+        self.login()
         self.profile()
 
 
     # R3.10 The ticket-buying form can be posted to /buy
     def test_posted_to_buy(self):
-        self.open(base_url + '/')
+        self.register()
+        self.login()
+        self.open(base_url + '/sell')
         self.type("#ticket_name", "")
         self.type("#quantity", 0)
         self.type("#price", 0)
@@ -114,4 +128,6 @@ class R3(BaseCase):
 
     # R3.11 The ticket-update form can be posted to /update
     def test_posted_to_update(self):
+        self.register()
+        self.login()
         self.profile()
