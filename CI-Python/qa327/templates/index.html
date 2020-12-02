@@ -9,17 +9,12 @@
     <h3 id='message'>Profile</h3>
     <a href='/sell' class="btn btn-primary" id="sell-btn" value="Sell Tickets">Sell Tickets</a>
 
-    <h4 id='message'>buy ticket</h4>
-    <form method="post">
-        <div class="form-group">
-            <label for="ticket_name">Ticket Name</label>
-            <input class="form-control" name="ticket_name" id="" required>
-            <label for="quantity">quantity</label>
-            <input class="form-control" name="quantity" id="quantity" required>
-            <input class="btn btn-primary" type="submit" value="submit">
-            <a href='/login' class="btn btn-primary" id="btn-logout" type="logout" value="logout">logout</a>
-        </div>
-    </form>
+
+
+    <a href='/buy' class="btn btn-primary" id="buy-btn" value="Buy Tickets">Buy Tickets</a>
+
+
+    <a href='/login' class="btn btn-primary" id="btn-logout" type="logout" value="logout">logout</a>
     <h4 id='message'>balance:</h4>
     <div class="ticketsBeingSold">
         <h1>Tickets Being Sold</h1>
@@ -29,7 +24,10 @@
                 <li>${{ ticket.price }} </li>
                 <li>{{ ticket.quantity }} available</li>
                 <li>Expires on {{ ticket.expiration_date }} - read as YYYYMMDD </li>
+
             </ul>
+
+
         {% endfor %}
     </div>
 {% endblock %}

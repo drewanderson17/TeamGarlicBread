@@ -59,6 +59,36 @@ def get_ticket(ticket_name):
     return ticket
 
 
+def ticket_exist(ticket_name):
+    value = Tickets.query.filter_by(ticket_name=ticket_name).first()
+    if value is None:
+        return False
+    else:
+        return True
+
+
+def get_ticket_quantity(ticket_name):
+    if ticket_exist(ticket_name):
+        ticket = Tickets.query.filter_by(ticket_name=ticket_name).first()
+        quantity = ticket.quantity
+        return quantity
+    else:
+        return -1
+
+
+def get_ticket_price(ticket_name):
+    if ticket_exist(ticket_name):
+        ticket = Tickets.query.filter_by(ticket_name=ticket_name).first()
+        price = ticket.price
+        return price
+    else:
+        return -1
+
+
+def get_user_balance(user):
+    return 50000
+
+
 def add_tickets(ticket_name, quantity, price, expiration_date):
     new_ticket = Tickets(ticket_name=ticket_name, quantity=quantity, price=price, expiration_date=expiration_date)
     if not db.session.query(Tickets.ticket_name).filter_by(ticket_name=ticket_name).scalar():  # ticket not in db
@@ -69,9 +99,9 @@ def add_tickets(ticket_name, quantity, price, expiration_date):
 
 
 def profile_user(balance, ticket_name, quantity, price, expiration_date):
-    #user_balance = User(balance = balance)
+    # user_balance = User(balance = balance)
     new_ticket = Tickets(ticket_name=ticket_name, quantity=quantity, price=price, expiration_date=expiration_date)
     db.session.add(new_ticket)
-    #db.session.add(user_balance)
-    db.session.commit() 
+    # db.session.add(user_balance)
+    db.session.commit()
     return new_ticket

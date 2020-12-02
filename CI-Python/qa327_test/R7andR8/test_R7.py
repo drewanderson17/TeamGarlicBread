@@ -63,13 +63,12 @@ class R7(BaseCase):
         self.open(base_url + '/logout')
         self.open(base_url + '/profile')
         self.assertTrue(self.get_current_url() == base_url + '/login')
-        # assert that user can't go to the restrected page
-        # repeat for other restriced pages
 
-    def test_error_404(self):
-        """register new user"""
-        self.login()
-        self.register()
-        self.open(base_url + '/invalidadress')
-        self.assertTrue(self.get_current_url() == base_url + '/invalidadress')
+
+    # def test_error_404(self):
+    #     """register new user"""
+    #     self.login()
+    #     self.register()
+    #     self.open(base_url + '/invalidadress')
+    #     self.assertTrue(self.get_current_url() == base_url + '/invalidadress')
 
