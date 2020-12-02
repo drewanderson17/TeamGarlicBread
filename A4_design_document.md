@@ -1,0 +1,20 @@
+| File        | Function             | Description                                                                                                                                               |
+|-------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Sell.html   | N/A                  | This file was created for the ‘/sell’ route and contains a form where users can enter information about the ticket they want to sell                      |
+| backend.py  | get_all_tickets      | Returns all tickets                                                                                                                                       |
+| backend.py  | add_tickets          | Adds ticket to database and returns True if ticket was successfully added                                                                                 |
+| frontend.py | sell                 | Defines route and renders template for ‘/sell’                                                                                                            |
+| frontend.py | validTicketName      | Ensures ticket name is valid based on R4                                                                                                                  |
+| frontend.py | validQuantity        | Ensures ticket quantity is valid based on R4                                                                                                              |
+| frontend.py | validPrice           | Ensures ticket price is valid based on R4                                                                                                                 |
+| frontend.py | validDate            | Ensures ticket’s expiration date is valid based on R4                                                                                                     |
+| frontend.py | sellValidTicket      | Ensures only valid tickets can be sold, based on R4. Captures information entered into sell.html and sends it to the backend to be added to the database. |
+| update.html | N/A                  | This file was created for the ‘/update’ route and contains a form where users can enter information about the ticket they want to update                  |
+| frontend.py | update               | Defines route and renders template for ‘/update’’                                                                                                         |
+| buy.html    | N/a                  | This file was created for the ‘/buyl’ route and contains a form where users can enter information about the ticket they want to buyl                      |
+| Frontend.py | validateBalance      | Validate that the users had enough in their account to purchase the ticket                                                                                |
+| Frontend.py | valid_Quantity       | Ensure that the user wasn’t trying to buy more tickets then the number of tickets being sold                                                              |
+| frontend.py | validate _Ticket     | Ensure ticket is in the db                                                                                                                                |
+| backend.py  | get _ticket_quantity | Return how many tickets are available of a certain ticket                                                                                                 |
+| backend.py  | get _ticket_price    | Get price of a certain ticket                                                                                                                             |
+| backend.py  | ticket_exists        | Checks if a ticket exists in the db.                                                                                                                      |
