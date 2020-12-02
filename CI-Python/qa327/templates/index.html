@@ -14,7 +14,7 @@
     <a href='/buy' class="btn btn-primary" id="buy-btn" value="Buy Tickets">Buy Tickets</a>
 
 
-
+    <a href='/login' class="btn btn-primary" id="btn-logout" type="logout" value="logout">logout</a>
     <h4 id='message'>balance:</h4>
     <div class="ticketsBeingSold">
         <h1>Tickets Being Sold</h1>
@@ -24,7 +24,10 @@
                 <li>${{ ticket.price }} </li>
                 <li>{{ ticket.quantity }} available</li>
                 <li>Expires on {{ ticket.expiration_date }} - read as YYYYMMDD </li>
+
             </ul>
+
+
         {% endfor %}
     </div>
 {% endblock %}
