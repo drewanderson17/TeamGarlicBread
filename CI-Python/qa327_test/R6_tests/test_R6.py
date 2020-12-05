@@ -5,6 +5,7 @@ from seleniumbase import BaseCase
 from qa327_test.conftest import base_url
 from unittest.mock import patch
 from qa327.models import db, User
+from qa327 import frontend as ft
 
 
 class R7(BaseCase):
@@ -27,6 +28,7 @@ class R7(BaseCase):
         self.click('input[type="submit"]')
 
     # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
+    @pytest.mark.R6
     def test_alphanum(self):
         self.login()
         self.open(base_url + '/buy')
@@ -34,29 +36,33 @@ class R7(BaseCase):
         self.type("#quantity", "50")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
-        self.assert_text("invalid Ticket name", "#error_message")
+        self.assert_text("Error: invalid Ticket name", "#error_message")
 
     # The name of the ticket is no longer than 60 characters
+    @pytest.mark.R6
     def test_ticketLength(self):
         self.login()
         self.open(base_url + '/buy')
-        self.type("#ticket_name", "StevenAkabasbfsakjfsabkjfbajkfbjksabfkabfjkbfjkasbfkjsabfksakjfbkjasfbkjsabfkabkjsabfjkafln32brpbfjekwfrbewlfkbrekjfrewbklrfjbingstongcom")
+        self.type("#ticket_name",
+                  "StevenAkabasbfsakjfsabkjfbajkfbjksabfkabfjkbfjkasbfkjsabfksakjfbkjasfbkjsabfkabkjsabfjkafln32brpbfjekwfrbewlfkbrekjfrewbklrfjbingstongcom")
         self.type("#quantity", "50")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
-        self.assert_text("invalid Ticket name", "#error_message")
+        self.assert_text("Error: invalid Ticket name", "#error_message")
 
     # The quantity of the tickets has to be more than 0, and less than or equal to 100.
+    @pytest.mark.R6
     def test_quantity(self):
         self.login()
         self.open(base_url + '/buy')
-        self.type("#ticket_name","test")
+        self.type("#ticket_name", "test")
         self.type("#quantity", "990")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
-        self.assert_text("Ticket quantity is invalid (quantity must be between [0,100]", "#error_message")
+        self.assert_text("Error: Ticket quantity is invalid (quantity must be between [0,100]", "#error_message")
 
     # The ticket name exists in the database
+    @pytest.mark.R6
     def test_ticket_exist(self):
         self.login()
         self.open(base_url + '/buy')
@@ -64,19 +70,41 @@ class R7(BaseCase):
         self.type("#quantity", "990")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
-        self.assert_text("Ticket does not exist", "#error_message")
+        self.assert_text("Error: Ticket does not exist", "#error_message")
 
     # the quantity is more than the quantity requested to buy
-
-    def test_ticket_exist(self):
+    @pytest.mark.R6
+    def test_user_quantity(self):
         self.login()
         self.open(base_url + '/buy')
         self.type("#ticket_name", "test")
         self.type("#quantity", "70")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
-        self.assert_text("Ticket does not exist", "#error_message")
+        self.assert_text("Error: Invalid Quantity (Tried To Buy "
+                                           "Too Many Tickets)", "#error_message")
 
+    #  The user has more balance than the ticket price * quantity + service fee (35%) + tax (5%)
+    # the users balance has been set to 300$
+    @pytest.mark.R6
+    def test_user_balance(self):
+        self.login()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name", "test")
+        self.type("#quantity", "13")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Error: account balance is invalid"", "#error_message")
+
+    # test a valid ticket entry
+    def test_good_ticket(self):
+        self.login()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name", "test")
+        self.type("#quantity", "4")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Tickets bought successfully!", "#error_message")
 
     # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
     # The name of the ticket is no longer than 60 characters
@@ -84,14 +112,3 @@ class R7(BaseCase):
 
     # The ticket name exists in the database and the quantity is more than the quantity requested to buy
     # The user has more balance than the ticket price * quantity + service fee (35%) + tax (5%)
-
-    '''
-    basic steps
-    
-    register as a user and login,
-    then create a valid ticket
-    
-    use as a fixture so only needs to run once
-    
-    
-    '''

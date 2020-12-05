@@ -328,7 +328,7 @@ def validTicket(ticket_name):
 # bn.get_ticket_quantity will return -1 if ticket isn't found
 def valid_quantity_buy(numTickets, ticket_name):
     availTickets = bn.get_ticket_quantity(ticket_name)
-    return availTickets - numTickets # return difference between tickets bought and sold
+    return availTickets - numTickets  # return difference between tickets bought and sold
     # (0 <= numTickets <= 100) and (numTickets > availTickets)
 
 
@@ -341,7 +341,6 @@ def validBalance(quantity, ticket_name):
     return balance - total_w_tax
 
 
-
 @app.route('/buy', methods=['POST'], endpoint='posted_end')
 @authenticate
 def sellValidTicket2(user):
@@ -349,14 +348,17 @@ def sellValidTicket2(user):
     quantity = request.form.get('quantity')
 
     bad_Quantity = render_template('buy.html', user=user, message=user.name,
-                                   error_message="Ticket quantity is invalid (quantity must be between [0,100]")
-    badBuy = render_template('buy.html', user=user, message=user.name, error_message="Invalid Quantity (Tried To Buy "
-                                                                                     "Too Many Tickets)")
+                                   error_message="Error: Ticket quantity is invalid (quantity must be between [0,100]")
+    badBuy = render_template('buy.html', user=user, message=user.name,
+                             error_message="Error: Invalid Quantity (Tried To Buy "
+                                           "Too Many Tickets)")
     badBalance = render_template('buy.html', user=user, message=user.name,
-                                 error_message=" account  balance is invalid")
-    bad_ticket_null = render_template('buy.html', user=user, message=user.name, error_message="Ticket does not exist")
+                                 error_message="Error: account balance is invalid")
+    bad_ticket_null = render_template('buy.html', user=user, message=user.name,
+                                      error_message="Error: Ticket does not exist")
 
-    bad_ticket_name = render_template('buy.html', user=user, message=user.name, error_message="invalid Ticket name")
+    bad_ticket_name = render_template('buy.html', user=user, message=user.name,
+                                      error_message="Error: invalid Ticket name")
     try:
         quantity = int(quantity)
     except Exception as e:
@@ -369,20 +371,20 @@ def sellValidTicket2(user):
     if not validTicket(ticket_name):
         return bad_ticket_null
 
-    quantity_diff = valid_quantity_buy(quantity, ticket_name)
     if (valid_quantity_buy(quantity, ticket_name)) < 0:
         return badBuy
 
     if not validQuantity(quantity):
         return bad_Quantity
+
     balance = validBalance(quantity, ticket_name)
     if validBalance(quantity, ticket_name) < 0:
         return badBalance
 
     else:
         return render_template('buy.html', user=user, message=user.name,
-                               error_message="Tickets bought successfully!, remaining balance is $" + str(balance))
-        #add information to update the ticket
+                               error_message="Tickets bought successfully!")
+        # add information to update the ticket
 
 
 # R5 Requirements
