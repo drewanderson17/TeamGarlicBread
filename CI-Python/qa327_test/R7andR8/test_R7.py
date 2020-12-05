@@ -1,11 +1,10 @@
-# import pytest
-# import requests
-# from selenium import webdriver
-# from seleniumbase import BaseCase
-# from qa327_test.conftest import base_url
-# from unittest.mock import patch
-# from qa327.models import db, User
-
+import pytest
+import requests
+from selenium import webdriver
+from seleniumbase import BaseCase
+from qa327_test.conftest import base_url
+from unittest.mock import patch
+from qa327.models import db, User
 
 
 # """
@@ -27,48 +26,48 @@
 # """
 
 
-# def test_check():
-#     assert 10 >= 10
+def test_check():
+    assert 10 >= 10
 
 
-# class R7(BaseCase):
-#     # mock a user information and register
-#     def register(self):
-#         # mock a user information
-#         self.open(base_url + '/register')
-#         self.type("#email", "StevenA@kingstong.com")
-#         self.type("#name", "stevena")
-#         self.type("#password", "scrum#Master1")
-#         self.type("#password2", "scrum#Master1")
-#         self.click('input[type="submit"]')
+class R7(BaseCase):
 
-#     # test after logging out user is returned to /login page
-#     def login(self):
-#         self.open(base_url + '/login')
-#         self.type("#email", "StevenA@kingstong.com")
-#         self.type("#password", "scrum#Master1")
-#         self.click('input[type="submit"]')
+    # mock a user information and register
 
-#     def test_logout(self):
-#         self.register()
-#         self.login()
-#         self.open(base_url + '/logout')
-#         self.assertTrue(self.get_current_url() == base_url + '/login')
+    def register(self):
+        # mock a user information
+        self.open(base_url + '/register')
+        self.type("#email", "StevenA@kingstong.com")
+        self.type("#name", "stevena")
+        self.type("#password", "scrum#Master1")
+        self.type("#password2", "scrum#Master1")
+        self.click('input[type="submit"]')
 
-#         #  	If the user hasn't logged in, show the login page
+    # test after logging out user is returned to /login page
+    def login(self):
+        self.open(base_url + '/login')
+        self.type("#email", "StevenA@kingstong.com")
+        self.type("#password", "scrum#Master1")
+        self.click('input[type="submit"]')
 
-#     def test_restrictedPages(self):
-#         self.register()
-#         self.login()
-#         self.open(base_url + '/logout')
-#         self.open(base_url + '/profile')
-#         self.assertTrue(self.get_current_url() == base_url + '/login')
+    def test_logout(self):
+        self.register()
+        self.login()
+        self.open(base_url + '/logout')
+        self.assertTrue(self.get_current_url() == base_url + '/login')
 
+    #         #  	If the user hasn't logged in, show the login page
 
-    # def test_error_404(self):
-    #     """register new user"""
-    #     self.login()
-    #     self.register()
-    #     self.open(base_url + '/invalidadress')
-    #     self.assertTrue(self.get_current_url() == base_url + '/invalidadress')
+    def test_restrictedPages(self):
+        self.register()
+        self.login()
+        self.open(base_url + '/logout')
+        self.open(base_url + '/register')
+        self.assertTrue(self.get_current_url() == base_url + '/register')
 
+    def test_error_404(self):
+        """register new user"""
+        self.login()
+
+        self.open(base_url + '/invalidadress')
+        self.assertTrue(self.get_current_url() == base_url + '/invalidadress')
