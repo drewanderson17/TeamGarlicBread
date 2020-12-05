@@ -86,7 +86,7 @@ def get_ticket_price(ticket_name):
 
 
 def get_user_balance(user):
-    return 50000
+    return 300
 
 
 def add_tickets(ticket_name, quantity, price, expiration_date):

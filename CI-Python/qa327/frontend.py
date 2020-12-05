@@ -142,10 +142,8 @@ def login_post():
         between browser and the end server. Typically it is encrypted 
         and stored in the browser cookies. They will be past 
         along between every request the browser made to this services.
-
         Here we store the user object into the session, so we can tell
         if the client has already login in the following sessions.
-
         """
         # success! go back to the home page
         # code 303 is to force a 'GET' request
@@ -182,14 +180,11 @@ def logout():
 def authenticate(inner_function):
     """
     :param inner_function: any python function that accepts a user object
-
-    Wrap any python function and check the current session to see if 
+    Wrap any python function and check the current session to see if
     the user has logged in. If login, it will call the inner_function
     with the logged in user object.
-
     To wrap a function, we can put a decoration on that function.
     Example:
-
     @authenticate
     def home_page(user):
         pass
@@ -329,19 +324,22 @@ def validTicket(ticket_name):
     return bn.ticket_exist(ticket_name) and val
 
 
-# R6.3 and part of R6.4
+# R6.3 and part of R6.4 the quantity is more than the quantity requested and quant is [0,100]
 # bn.get_ticket_quantity will return -1 if ticket isn't found
-def valid_Quantity(numTickets, ticket_name):
+def valid_quantity_buy(numTickets, ticket_name):
     availTickets = bn.get_ticket_quantity(ticket_name)
-    return (0 <= numTickets <= 100) and (numTickets > availTickets)
+    return availTickets - numTickets # return difference between tickets bought and sold
+    # (0 <= numTickets <= 100) and (numTickets > availTickets)
 
 
-# R6.5
+# R6.5 test user balance, for the purpose of testing every user start with balance of 300
 def validBalance(quantity, ticket_name):
     price = bn.get_ticket_price(ticket_name)
     balance = bn.get_user_balance('user')
     total = quantity * price
-    return balance > total + (total * 0.35) + (total * 0.05)
+    total_w_tax = (total + (total * 0.35) + (total * 0.05))
+    return balance - total_w_tax
+
 
 
 @app.route('/buy', methods=['POST'], endpoint='posted_end')
@@ -363,6 +361,7 @@ def sellValidTicket2(user):
         quantity = int(quantity)
     except Exception as e:
         return bad_Quantity
+    diff = valid_quantity_buy(quantity, ticket_name)
 
     if not validTicketName(ticket_name):
         return bad_ticket_name
@@ -370,17 +369,21 @@ def sellValidTicket2(user):
     if not validTicket(ticket_name):
         return bad_ticket_null
 
-    if not valid_Quantity(quantity, ticket_name):
+    quantity_diff = valid_quantity_buy(quantity, ticket_name)
+    if (valid_quantity_buy(quantity, ticket_name)) < 0:
         return badBuy
 
     if not validQuantity(quantity):
         return bad_Quantity
-
-    if not validBalance(quantity, ticket_name):
+    balance = validBalance(quantity, ticket_name)
+    if validBalance(quantity, ticket_name) < 0:
         return badBalance
 
     else:
-        return render_template('buy.html', user=user, message=user.name, error_message="Tickets bought successfully!")
+        return render_template('buy.html', user=user, message=user.name,
+                               error_message="Tickets bought successfully!, remaining balance is $" + str(balance))
+        #add information to update the ticket
+
 
 # R5 Requirements
 @app.route('/update', methods=['GET'], endpoint="update_end")
@@ -388,18 +391,22 @@ def sellValidTicket2(user):
 def update(user):
     return render_template('update.html', user=user, message=user.name, error_message="")
 
+
 # R5.1, 5.2 Check valid ticket name
 def validTicket2(ticket_name):
     val = validTicketName(ticket_name)
     return bn.ticket_exist(ticket_name) and val
 
+
 # R5.3 Check quantity of tickets
 def validQuantity2(numOfTickets):
     return 0 <= numOfTickets <= 100
 
+
 # R5.4 Ticket price
 def validPrice2(ticketPrice):
     return 10 <= ticketPrice <= 100
+
 
 # R5.5 Check date format
 def validDate2(date):
@@ -409,6 +416,7 @@ def validDate2(date):
     date //= 100
     year = date
     return year >= 2020 and 1 <= month <= 12 and 1 <= days <= 31
+
 
 # R5.6 ticket exists
 def validTicket3(ticket_name):
@@ -427,11 +435,13 @@ def sellValidTicket3(user):
 
     bad_Quantity = render_template('update.html', user=user, message=user.name,
                                    error_message="Ticket quantity is invalid (quantity must be between [0,100]")
-    badBuy = render_template('update.html', user=user, message=user.name, error_message="Invalid Quantity (Tried To update "
-                                                                                     "Too Many Tickets)")
+    badBuy = render_template('update.html', user=user, message=user.name,
+                             error_message="Invalid Quantity (Tried To update "
+                                           "Too Many Tickets)")
     badBalance = render_template('update.html', user=user, message=user.name,
                                  error_message=" account  balance is invalid")
-    bad_ticket_null = render_template('update.html', user=user, message=user.name, error_message="Ticket does not exist")
+    bad_ticket_null = render_template('update.html', user=user, message=user.name,
+                                      error_message="Ticket does not exist")
 
     bad_ticket_name = render_template('update.html', user=user, message=user.name, error_message="invalid Ticket name")
     try:
@@ -445,7 +455,7 @@ def sellValidTicket3(user):
     if not validTicket(ticket_name):
         return bad_ticket_null
 
-    if not valid_Quantity(quantity, ticket_name):
+    if not valid_quantity_buy(quantity, ticket_name):
         return badBuy
 
     if not validQuantity(quantity):
@@ -455,4 +465,5 @@ def sellValidTicket3(user):
         return badBalance
 
     else:
-        return render_template('update.html', user=user, message=user.name, error_message="Tickets bought successfully!")
+        return render_template('update.html', user=user, message=user.name,
+                               error_message="Tickets have been updated")
