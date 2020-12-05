@@ -348,7 +348,7 @@ def sellValidTicket2(user):
     quantity = request.form.get('quantity')
 
     bad_Quantity = render_template('buy.html', user=user, message=user.name,
-                                   error_message="Error: Ticket quantity is invalid (quantity must be between [0,100]")
+                                   error_message="Error: Ticket quantity must be between [0,100]")
     badBuy = render_template('buy.html', user=user, message=user.name,
                              error_message="Error: Invalid Quantity (Tried To Buy "
                                            "Too Many Tickets)")
