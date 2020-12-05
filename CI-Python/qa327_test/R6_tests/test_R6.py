@@ -36,24 +36,54 @@ class R7(BaseCase):
         self.assert_element("#error_message")
         self.assert_text("invalid Ticket name", "#error_message")
 
+    # The name of the ticket is no longer than 60 characters
     def test_ticketLength(self):
         self.login()
         self.open(base_url + '/buy')
-        self.type("#ticket_name", "StevenAkabasbfsakjfsabkjfbajkfbjksabfkabfjkbfjkasbfkjsabfksakjfbkjasfbkjsabfkabkjsabfjkafln32brpbfjekwfrbewlfkbrekjfrewbklrfjbingstong.com")
+        self.type("#ticket_name", "StevenAkabasbfsakjfsabkjfbajkfbjksabfkabfjkbfjkasbfkjsabfksakjfbkjasfbkjsabfkabkjsabfjkafln32brpbfjekwfrbewlfkbrekjfrewbklrfjbingstongcom")
         self.type("#quantity", "50")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
         self.assert_text("invalid Ticket name", "#error_message")
 
+    # The quantity of the tickets has to be more than 0, and less than or equal to 100.
+    def test_quantity(self):
+        self.login()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name","test")
+        self.type("#quantity", "990")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Ticket quantity is invalid (quantity must be between [0,100]", "#error_message")
+
+    # The ticket name exists in the database
+    def test_ticket_exist(self):
+        self.login()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name", "bugsBunny")
+        self.type("#quantity", "990")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Ticket does not exist", "#error_message")
+
+    # the quantity is more than the quantity requested to buy
+
+    def test_ticket_exist(self):
+        self.login()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name", "test")
+        self.type("#quantity", "70")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Ticket does not exist", "#error_message")
 
 
+    # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
+    # The name of the ticket is no longer than 60 characters
+    # The quantity of the tickets has to be more than 0, and less than or equal to 100.
 
-
-    #The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
-    #The name of the ticket is no longer than 60 characters
-    #The quantity of the tickets has to be more than 0, and less than or equal to 100.
-    #The ticket name exists in the database and the quantity is more than the quantity requested to buy
-    #The user has more balance than the ticket price * quantity + service fee (35%) + tax (5%)
+    # The ticket name exists in the database and the quantity is more than the quantity requested to buy
+    # The user has more balance than the ticket price * quantity + service fee (35%) + tax (5%)
 
     '''
     basic steps
