@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 @pytest.mark.usefixtures('server')
-class R1(BaseCase):
+class R4(BaseCase):
     def register(self):
         """register new user"""
         self.open(base_url + '/register')
