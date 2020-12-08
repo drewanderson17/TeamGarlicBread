@@ -19,7 +19,7 @@
     <div class="ticketsBeingSold">
         <h1>Tickets Being Sold</h1>
         {% for ticket in tickets %}
-            <h3>{{ ticket.ticket_name }}</h3>
+            <h3 id="ticket_display_name">{{ ticket.ticket_name }}</h3>
             <ul>
                 <li>${{ ticket.price }} </li>
                 <li>{{ ticket.quantity }} available</li>
