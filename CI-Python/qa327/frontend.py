@@ -258,7 +258,7 @@ def validTicketName(ticketName):
 
 
 def validQuantity(numOfTickets):
-    return 0 <= numOfTickets <= 100
+    return 0 < numOfTickets <= 100
 
 
 def validPrice(ticketPrice):
