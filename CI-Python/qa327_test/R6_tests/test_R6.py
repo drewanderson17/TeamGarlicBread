@@ -29,15 +29,13 @@ class R7(BaseCase):
 
     def sell(self):
         self.open(base_url + '/sell')
-        self.type("#ticket_name", "test")
-        self.type("quantity", "30")
-        self.type("#price", "30")
-        self.type("expiration_date", "20211119")
+        self.type("#ticket_name", 'test')
+        self.type("#quantity", "10")
+        self.type("#price", '15')
+        self.type("#expiration_date", "20200901")
         self.click('input[type="submit"]')
 
-
     # The name of the ticket has to be alphanumeric-only, and space allowed only if it is not the first or the last character.
-    @pytest.mark.R6
     def test_alphanum(self):
         self.register()
         self.login()
@@ -50,7 +48,7 @@ class R7(BaseCase):
         self.assert_text("Error: invalid Ticket name", "#error_message")
 
     # The name of the ticket is no longer than 60 characters
-    @pytest.mark.R6
+
     def test_ticketLength(self):
         self.login()
         self.open(base_url + '/buy')
@@ -62,32 +60,37 @@ class R7(BaseCase):
         self.assert_text("Error: invalid Ticket name", "#error_message")
 
     # The quantity of the tickets has to be more than 0, and less than or equal to 100.
-    # @pytest.mark.R6
-    # def test_quantity(self):
-    #     self.register()
-    #     self.login()
-    #     self.open(base_url + '/buy')
-    #     self.type("#ticket_name", "test")
-    #     self.type("#quantity", "990")
-    #     self.click('input[type="submit"]')
-    #     self.assert_element("#error_message")
-    #     self.assert_text("Error: Ticket quantity must be between [0,100]", "#error_message")
+    def test_quantity(self):
+        self.register()
+        self.login()
+        self.sell()
+        self.open(base_url + '/buy')
+        self.type("#ticket_name", "test")
+        self.type("#quantity", "990")
+        self.click('input[type="submit"]')
+        self.assert_element("#error_message")
+        self.assert_text("Error: Invalid Quantity (Tried To Buy Too Many Tickets)", "#error_message")
 
     # The ticket name exists in the database
-    @pytest.mark.R6
+
     def test_ticket_exist(self):
+
+        self.register()
         self.login()
+        self.sell()
+
         self.open(base_url + '/buy')
-        self.type("#ticket_name", "bugsBunny")
+        self.type("#ticket_name", 'bugsBunny')
         self.type("#quantity", "90")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
         self.assert_text("Error: Ticket does not exist", "#error_message")
 
     # the quantity is more than the quantity requested to buy
-    @pytest.mark.R6
     def test_user_quantity(self):
+        self.register()
         self.login()
+        self.sell()
         self.open(base_url + '/buy')
         self.type("#ticket_name", "test")
         self.type("#quantity", "70")
@@ -97,23 +100,25 @@ class R7(BaseCase):
 
     #  The user has more balance than the ticket price * quantity + service fee (35%) + tax (5%)
     # the users balance has been set to 300$
-    @pytest.mark.R6
     def test_user_balance(self):
+        self.register()
         self.login()
+        self.sell()
         self.open(base_url + '/buy')
         self.type("#ticket_name", "test")
-        self.type("#quantity", "13")
+        self.type("#quantity", "9")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
         self.assert_text("Error: account balance is invalid", "#error_message")
 
     # test a valid ticket entry
-    @pytest.mark.R6
     def test_good_ticket(self):
+        self.register()
         self.login()
+        self.sell()
         self.open(base_url + '/buy')
         self.type("#ticket_name", "test")
-        self.type("#quantity", "4")
+        self.type("#quantity", "3")
         self.click('input[type="submit"]')
         self.assert_element("#error_message")
         self.assert_text("Tickets bought successfully!", "#error_message")
