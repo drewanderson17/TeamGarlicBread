@@ -109,5 +109,7 @@ venv.bak/
 archived_logs
 latest_logs
 db.sqlite
+
+mysql_data 
 .DS_Store
 ../.DS_Store
