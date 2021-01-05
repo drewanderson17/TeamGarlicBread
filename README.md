@@ -1,9 +1,3 @@
 # TeamGarlicBread
 Course project for CISC327 (Software Quality Assurance)
-
-# Repo Owner Id
-danielGoldsteinCS2021
-
----
-
-[![](https://github.com/repo_owner_id/repo_name/workflows/pythonapp/badge.svg)]()
+Helped build a website for buying and selling tickets, using django and flask. Quality Assurance practices where used and maintained
